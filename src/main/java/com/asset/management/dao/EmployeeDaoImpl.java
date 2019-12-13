@@ -128,7 +128,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		final Employee emp = employeeRepository.findByEmpNo(empNo);
 		List<AssetVO> asset = getAsset(emp.getEmpId());
 		if (asset.isEmpty()) {
-			emp.setStatus(Status.Inactive);
+			emp.setStatus(Status.Terminated);
 			employeeRepository.flush();
 			loginRepository.deleteByEmployeeId(emp.getEmpId());
 		} else {
