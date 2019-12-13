@@ -428,8 +428,43 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	@Override
 	public void addBill(TempVo data) {
 		logger.info("------------------> Add Bill <-----------------------------");
-		//ReimbursementTrackVo trackData= reimbursementTrackRepository.getReimbursementId(data.getReimbursementId());
-//        logger.info("{}",trackData);
+		logger.info("ID------------------------------->"+data.getReimbursementId());
+		ReimbursementTrack trackData= reimbursementTrackRepository.getReimbursemenData(data.getReimbursementId());
+		//trackData.setReimbursementDetails(data.getReimbursementId());
+		List<ReimbursementDetails> bills = trackData.getReimbursementDetails();
+		for (int i = 0; i < bills.size(); i++) {
+			 bills.get(i).setReimbursementTrack(data.getReimbursementId());
+		}
+		
+		
+        //ReimbursementTrackVo trackDataVo=reimbursementTrackMapper.entityConversion(trackData);
+		//List<ReimbursementVo> listDaata=trackDataVo.getReimbursementDetails();
+		
+		//trackData.setReimbursementDetails(bills);
+		
+		ReimbursementVo temp=new ReimbursementVo();
+		//trackDataVo.getReimbursementDetails().get(1);
+		//System.out.println("get1--------------------------------->"+trackDataVo);
+		temp.setBillDate("2019-11-14");
+		temp.setReimbursementDescription("Lunch");
+		temp.setCategoryName("Food");
+		temp.setCost(2000);
+		BigInteger billNo = new BigInteger("12332130");
+		temp.setBillNo(billNo);
+		temp.setBillStatus(Status.Save);
+		
+		ReimbursementDetails convertBill=reimbursementMapper.voConversion(temp);
+		bills.add(convertBill);
+		
+		//listDaata.add(temp);
+		
+		//logger.info(" Vo ------------------------------>"+listDaata);
+//		trackDataVo.getReimbursementDetails().add(temp);
+		//trackData=reimbursementTrackMapper.voConversion(trackDataVo);
+		logger.info(" Entity ------------------------------>"+trackData);
+		trackData.setReimbursementDetails(bills);
+		reimbursementTrackRepository.saveAndFlush(trackData);
+		logger.info("{}",trackData);
 //        System.out.println(trackData);
         
 		//ReimbursementDetails bills = reimbursementRepository.findByBillId(data.getBillId());
