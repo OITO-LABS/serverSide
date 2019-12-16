@@ -17,8 +17,8 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 import com.asset.management.service.UserLoginServiceImpl;
 
 
-//@Configuration
-//@EnableWebSecurity
+@Configuration
+@EnableWebSecurity
 public class SpringSecurityConfigurationBasicAuth extends WebSecurityConfigurerAdapter {
 	
 	@Autowired

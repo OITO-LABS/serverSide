@@ -1,4 +1,6 @@
 
+
+
 package com.asset.management.dao.entity;
 
 import java.math.BigInteger;
@@ -30,10 +32,10 @@ public class ReimbursementDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "track_id")
 	private Long trackId;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "reimbursement_id")
-	private ReimbursementTrack reimbursementTrack;
+
+	//@ManyToOne(cascade = CascadeType.ALL) @JoinColumn
+	@Column(name = "reimbursement_id")
+	private Long reimbursementTrack;
 
 	@Column(name = "reimbursement_bill_date")
 	private String billDate;
@@ -54,3 +56,5 @@ public class ReimbursementDetails {
 	@Enumerated(EnumType.STRING)
 	private Status billStatus;
 }
+
+
