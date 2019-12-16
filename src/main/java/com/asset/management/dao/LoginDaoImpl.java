@@ -81,10 +81,10 @@ public class LoginDaoImpl implements LoginDao {
 	public ResponseVO update(LoginVo logVo) throws Exception {
 		ResponseVO response=new ResponseVO();
 		Login logEntity=loginMap.loginConvertion(logVo);
-		Login demoEntity=loginRepository.findByEmployeeId(logVo.getEmployeeId());
-		//Login demoEntity=loginRepository.findByUsername(logVo.getUsername());
-		if(demoEntity.getUsername().equals(logEntity.getUsername())) {
-					//if(demoEntity!=null) {
+		//Login demoEntity=loginRepository.findByEmployeeId(logVo.getEmployeeId());
+		Login demoEntity=loginRepository.findByUsername(logVo.getUsername());
+		//if(demoEntity.getUsername().equals(logEntity.getUsername())) {
+		if(demoEntity!=null) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String hashedPassword = passwordEncoder.encode(logEntity.getPassword());
 			demoEntity.setPassword(hashedPassword);
