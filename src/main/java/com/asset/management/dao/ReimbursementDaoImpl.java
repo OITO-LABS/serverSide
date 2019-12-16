@@ -430,21 +430,14 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		logger.info("------------------> Add Bill <-----------------------------");
 		logger.info("ID------------------------------->"+data.getReimbursementId());
 		ReimbursementTrack trackData= reimbursementTrackRepository.getReimbursemenData(data.getReimbursementId());
-		//trackData.setReimbursementDetails(data.getReimbursementId());
-		List<ReimbursementDetails> bills = trackData.getReimbursementDetails();
+			List<ReimbursementDetails> bills = trackData.getReimbursementDetails();
 		for (int i = 0; i < bills.size(); i++) {
 			 bills.get(i).setReimbursementTrack(data.getReimbursementId());
 		}
 		
-		
-        //ReimbursementTrackVo trackDataVo=reimbursementTrackMapper.entityConversion(trackData);
-		//List<ReimbursementVo> listDaata=trackDataVo.getReimbursementDetails();
-		
-		//trackData.setReimbursementDetails(bills);
+	
 		
 		ReimbursementVo temp=new ReimbursementVo();
-		//trackDataVo.getReimbursementDetails().get(1);
-		//System.out.println("get1--------------------------------->"+trackDataVo);
 		temp.setBillDate("2019-11-14");
 		temp.setReimbursementDescription("Lunch");
 		temp.setCategoryName("Food");
@@ -456,28 +449,50 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		ReimbursementDetails convertBill=reimbursementMapper.voConversion(temp);
 		bills.add(convertBill);
 		
-		//listDaata.add(temp);
-		
-		//logger.info(" Vo ------------------------------>"+listDaata);
-//		trackDataVo.getReimbursementDetails().add(temp);
-		//trackData=reimbursementTrackMapper.voConversion(trackDataVo);
+
 		logger.info(" Entity ------------------------------>"+trackData);
 		trackData.setReimbursementDetails(bills);
 		reimbursementTrackRepository.saveAndFlush(trackData);
 		logger.info("{}",trackData);
-//        System.out.println(trackData);
-        
-		//ReimbursementDetails bills = reimbursementRepository.findByBillId(data.getBillId());
+
 		
 
 	}
 
 	@Override
-	public void updateBill(TempVo data) {
-		ReimbursementDetails bill = reimbursementRepository.findByBillId(data.getBillId());
-	//	bill.setBillDate(data.getBillDate());
+	public void updateBill(ReimbursementTrackVo data) {
+		
+		List<ReimbursementVo> newBillList=data.getReimbursementDetails();
+		ReimbursementTrack trackData= reimbursementTrackRepository.getReimbursemenData(data.getReimbursementId());
+		List<ReimbursementDetails> bills = trackData.getReimbursementDetails();
+		for (int i = 0; i < bills.size(); i++) {
+			 bills.get(i).setReimbursementTrack(data.getReimbursementId());
+			 
+		}
+		
+		
+		
+		
+		
+		
+		//	bill.setBillDate(data.getBillDate());
 		// bill.setBillNo(data.getBillNo());
 
+	}
+
+	@Override
+	public String billApproval(TempVo data) {
+		
+		if(data.getAction()==0)
+		{
+			
+		}
+		else if(data.getAction()==1)
+		{
+			
+		}
+		
+		return null;
 	}
 
 }

@@ -39,7 +39,9 @@ public interface ReimbursementDao {
 	
 	public void addBill(TempVo data);
 	
-	public void updateBill(TempVo data);
+	public void updateBill(ReimbursementTrackVo data);
+	
+	String billApproval(@RequestBody TempVo data);
 
 }
 

@@ -40,7 +40,9 @@ public interface ReimbursementService {
 	
 	public void addBill(@RequestBody TempVo data);
 	
-	public void updateBill(@RequestBody TempVo data);
+	public void updateBill(@RequestBody ReimbursementTrackVo data);
+	
+	String billApproval(@RequestBody TempVo data);
 }
 
 

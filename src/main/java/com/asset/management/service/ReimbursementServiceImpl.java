@@ -97,9 +97,15 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	}
 
 	@Override
-	public void updateBill(TempVo data) {
+	public void updateBill(ReimbursementTrackVo data) {
 		reimbursementDao.updateBill(data);
 		
+	}
+
+	@Override
+	public String billApproval(TempVo data) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 
