@@ -433,22 +433,12 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	@Override
 	public void addBill(TempVo data) {
 		logger.info("------------------> Add Bill <-----------------------------");
-		// ReimbursementTrackVo trackData=
-		// reimbursementTrackRepository.getReimbursementId(data.getReimbursementId());
-//        logger.info("{}",trackData);
-//        System.out.println(trackData);
-
-		// ReimbursementDetails bills =
-		// reimbursementRepository.findByBillId(data.getBillId());
 
 	}
 
 	@Override
 	public void updateBill(ReimbursementApplyVo data) {
-		// ReimbursementDetails bill =
-		// reimbursementRepository.findByBillId(data.getBillId());
-		// bill.setBillDate(data.getBillDate());
-		// bill.setBillNo(data.getBillNo());
+		
 
 	}
 
