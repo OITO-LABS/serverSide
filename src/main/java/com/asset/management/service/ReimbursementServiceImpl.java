@@ -97,7 +97,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	}
 
 	@Override
-	public void updateBill(TempVo data) {
+	public void updateBill(ReimbursementApplyVo data) {
 		reimbursementDao.updateBill(data);
 		
 	}

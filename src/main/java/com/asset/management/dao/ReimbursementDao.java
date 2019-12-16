@@ -40,7 +40,7 @@ public interface ReimbursementDao {
 	
 	public void addBill(TempVo data);
 	
-	public void updateBill(@ModelAttribute ReimbursementApplyVo data);
+	public void updateBill(ReimbursementApplyVo data);
 
 }
 

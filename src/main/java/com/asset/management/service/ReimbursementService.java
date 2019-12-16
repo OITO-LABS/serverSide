@@ -2,6 +2,7 @@ package com.asset.management.service;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -40,7 +41,7 @@ public interface ReimbursementService {
 	
 	public void addBill(@RequestBody TempVo data);
 	
-	public void updateBill(@RequestBody TempVo data);
+	public void updateBill(@ModelAttribute ReimbursementApplyVo data);
 }
 
 

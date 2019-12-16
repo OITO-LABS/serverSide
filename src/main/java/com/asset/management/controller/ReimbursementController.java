@@ -121,7 +121,7 @@ public class ReimbursementController {
 	}
 
 	@PostMapping("update-bill")
-	public String updateBill(@RequestBody TempVo data) {
+	public String updateBill(@ModelAttribute ReimbursementApplyVo data) {
 		reimbursementService.updateBill(data);
 		return "Success";
 	}
