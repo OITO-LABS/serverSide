@@ -30,7 +30,7 @@ import com.asset.management.dao.repository.AssetRepository;
 import com.asset.management.dao.repository.ProductCategoryRepository;
 
 
-//
+
 @Component
 public class AssetDaoImpl implements AssetDao {
 	@Autowired
