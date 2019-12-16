@@ -41,7 +41,7 @@ public interface ReimbursementService {
 	
 	public void addBill(@RequestBody TempVo data);
 	
-	public void updateBill(@ModelAttribute ReimbursementApplyVo data);
+	public ResponseVO updateBill(ReimbursementApplyVo data);
 }
 
 

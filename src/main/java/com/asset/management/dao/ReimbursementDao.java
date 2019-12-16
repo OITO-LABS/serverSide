@@ -40,7 +40,7 @@ public interface ReimbursementDao {
 	
 	public void addBill(TempVo data);
 	
-	public void updateBill(ReimbursementApplyVo data);
+	public ResponseVO updateBill(ReimbursementApplyVo data);
 
 }
 

@@ -120,9 +120,9 @@ public class ReimbursementController {
 	}
 
 	@PostMapping("update-bill")
-	public String updateBill(@ModelAttribute ReimbursementApplyVo data) {
-		reimbursementService.updateBill(data);
-		return "Success";
+	public ResponseVO updateBill(@ModelAttribute ReimbursementApplyVo data) {
+		return reimbursementService.updateBill(data);
+		
 	}
 
 }

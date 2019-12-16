@@ -437,9 +437,91 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	}
 
 	@Override
-	public void updateBill(ReimbursementApplyVo data) {
+	public ResponseVO updateBill(ReimbursementApplyVo data) {
+
+		ResponseVO returnValue = new ResponseVO();
+		MultipartFile[] file = data.getImageData();
+		int flag=0;
+		ReimbursementTrackVo trackData = new ReimbursementTrackVo();
+		trackData.setEmpNo(data.getEmpNo());
+		trackData.setReimbursementDate(data.getReimbursementDate());
+		trackData.setTotalCost(data.getTotalCost());
+		trackData.setReimbursementStatus(Status.Save);
+		List<ReimbursementVo> billData = new ArrayList<>();
+		String bills = data.getReimbursementBills();
+		Object obj = JSONValue.parse(bills);
+		JSONArray array = (JSONArray) obj;
+		for (int i = 0; i < array.size(); i++) {
+			ReimbursementVo bill = new ReimbursementVo();
+			JSONObject jsonObject1 = (JSONObject) array.get(i);
+			bill.setBillDate((String) jsonObject1.get("billDate"));
+			bill.setReimbursementDescription((String) jsonObject1.get("reimbursementDescription"));
+			bill.setCategoryName((String) jsonObject1.get("categoryName"));
+			BigInteger billNo = new BigInteger((String) jsonObject1.get("billNo"));
+			bill.setBillNo(billNo);
+			String costCovert = (String) jsonObject1.get("cost");
+			int x = Integer.parseInt(costCovert);
+			double cost = ((double) x);
+			bill.setCost(cost);
+			bill.setBillStatus(Status.Save);
+			System.out.println(bill);
+			billData.add(bill);
+
+		}
+		trackData.setReimbursementDetails(billData);
+
+		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(data.getReimbursementId());
+		List<ReimbursementDetails> bill = Data.getReimbursementDetails();
+		for (int i = 0; i < bill.size(); i++) {
+			for (int j = 0; j < billData.size(); j++) {
+				if ((bill.get(j).getBillDate()).equals((billData.get(j).getBillDate()))) {
+					if ((bill.get(j).getCategoryName()).equals((billData.get(j).getCategoryName()))) {
+						if ((bill.get(j).getReimbursementDescription())
+								.equals((billData.get(j).getReimbursementDescription()))) {
+							if ((bill.get(j).getBillNo()) == ((billData.get(j).getBillNo()))) {
+								if ((bill.get(j).getCost()) == ((billData.get(j).getCost()))) {
+									 bill.get(i).setReimbursementTrack(data.getReimbursementId());
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					ReimbursementVo temp=new ReimbursementVo();
+					temp.setBillDate(billData.get(j).getBillDate());
+					temp.setReimbursementDescription((billData.get(j).getReimbursementDescription()));
+					temp.setCategoryName((billData.get(j).getCategoryName()));
+					temp.setCost((billData.get(j).getCost()));
+					temp.setBillNo((billData.get(j).getBillNo()));
+					temp.setBillStatus(Status.Save);
+					ReimbursementDetails convertBill=reimbursementMapper.voConversion(temp);
+					bill.add(convertBill);
+						File convertFile = new File("src/main/resources/public/bills/" + (billData.get(j).getBillNo())
+								+ "."
+								+ file[flag].getOriginalFilename().substring(file[flag].getOriginalFilename().lastIndexOf(".") + 1));
+						String path = "src/main/resources/Bills" + file[flag].getOriginalFilename();
+						try {
+							convertFile.createNewFile();
+							FileOutputStream fout = new FileOutputStream(convertFile);
+							fout.write(file[flag].getBytes());
+							flag=flag+1;
+
+						} catch (IOException e) {
+
+						}
+					
+					
+				}
+			}
+		}
+		reimbursementTrackRepository.saveAndFlush(Data);
+		returnValue.setMessage("Successfully Updated");
+		returnValue.setStatus("sucess");
+		logger.info("{}",Data);
+		return returnValue;
 		
-
+		
 	}
-
+   
 }
