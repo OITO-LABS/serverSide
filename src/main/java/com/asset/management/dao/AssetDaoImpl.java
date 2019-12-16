@@ -30,7 +30,7 @@ import com.asset.management.dao.repository.AssetRepository;
 import com.asset.management.dao.repository.ProductCategoryRepository;
 
 
-
+//
 @Component
 public class AssetDaoImpl implements AssetDao {
 	@Autowired
@@ -57,7 +57,7 @@ public class AssetDaoImpl implements AssetDao {
 		final AssetEntity assetEntity = map.assetConvertion(assetVO);
 		final ResponseVO response = validator.addValidation(assetEntity);
 
-		if (response.getStatus().equals("Success")) {
+		if (response.getStatus().equals("success")) {
 
 			final Calendar cal = Calendar.getInstance();
 			assetEntity.setEnableStatus(Status.Unassigned);

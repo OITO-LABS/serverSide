@@ -136,11 +136,11 @@ public class LoginServiceImpl implements LoginService {
 
 	}
 
-	@Override
-	public LoginVo login(LoginVo logVo) throws Exception {
-			logVo.setPassword(encryptPassword(logVo.getPassword()));
-			return logDao.login(logVo);
-	}
+//	@Override
+//	public LoginVo login(LoginVo logVo) throws Exception {
+//			//logVo.setPassword(encryptPassword(logVo.getPassword()));
+//			return logDao.login(logVo);
+//	}
 
 	@Override
 	public Employee findEmp(String mail) throws Exception {

@@ -2,6 +2,7 @@
 package com.asset.management.controller;
 
 import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -25,7 +26,8 @@ import com.asset.management.VO.ProfileVo;
 import com.asset.management.VO.ResponseVO;
 import com.asset.management.dao.entity.Employee;
 import com.asset.management.service.LoginService;
-
+import com.asset.management.service.UserLoginServiceImpl;
+//
 @RestController
 @RequestMapping("api/login")
 public class LoginController {
@@ -42,13 +44,17 @@ public class LoginController {
 	HttpServletResponse response;
 	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AssetController.class);
 
+	@Autowired
+	private UserLoginServiceImpl userLoginServiceImpl;
 	// login
 
 	@PostMapping
 	public LoginVo login(@ModelAttribute final LoginVo logVo) {
 		final ResponseVO response=new ResponseVO();
 		try {
-			final LoginVo logVO=loginService.login(logVo);
+			LoginVo logVO=new LoginVo();
+			String username=logVo.getUsername();
+			userLoginServiceImpl.loadUserByUsername(username);
 			response.setStatus("success");
 			logVO.setResponse(response);
 			return logVO;
