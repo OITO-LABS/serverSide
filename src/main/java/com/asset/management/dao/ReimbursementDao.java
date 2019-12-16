@@ -2,6 +2,7 @@ package com.asset.management.dao;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.asset.management.VO.CategoryVo;
@@ -39,7 +40,7 @@ public interface ReimbursementDao {
 	
 	public void addBill(TempVo data);
 	
-	public void updateBill(TempVo data);
+	public void updateBill(@ModelAttribute ReimbursementApplyVo data);
 
 }
 
