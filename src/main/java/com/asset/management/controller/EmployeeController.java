@@ -79,6 +79,7 @@ public class EmployeeController {
 			Long id = employeeService.register(obj);
 			employeeService.upload(obj.getImage(),id);
 			status.setStatus("success");
+			status.setMessage("Registration success");
 
 		} catch (final Exception c) {
 			status.setStatus("Failed!");
