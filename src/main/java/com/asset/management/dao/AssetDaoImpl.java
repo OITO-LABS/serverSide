@@ -57,7 +57,7 @@ public class AssetDaoImpl implements AssetDao {
 		final AssetEntity assetEntity = map.assetConvertion(assetVO);
 		final ResponseVO response = validator.addValidation(assetEntity);
 
-		if (response.getStatus().equals("Success")) {
+		if (response.getStatus().equals("success")) {
 
 			final Calendar cal = Calendar.getInstance();
 			assetEntity.setEnableStatus(Status.Unassigned);
