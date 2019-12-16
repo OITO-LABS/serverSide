@@ -42,7 +42,6 @@ import ch.qos.logback.classic.Logger;
 @RestController
 @RequestMapping("api/reimbursement")
 public class ReimbursementController {
-	//reimbursement
 	@Autowired
 	private ReimbursementService reimbursementService;
 
