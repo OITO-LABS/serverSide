@@ -42,6 +42,8 @@ public interface ReimbursementService {
 	public void addBill(@RequestBody TempVo data);
 	
 	public ResponseVO updateBill(ReimbursementApplyVo data);
+	
+	ResponseVO billApproval(@RequestBody PageViewVo page);
 }
 
 

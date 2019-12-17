@@ -16,4 +16,5 @@ public class TempVo {
 	String categoryName;
 	BigInteger billNo;
 	double cost;
+	
 }

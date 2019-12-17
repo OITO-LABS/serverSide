@@ -441,7 +441,8 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 		ResponseVO returnValue = new ResponseVO();
 		MultipartFile[] file = data.getImageData();
-		int flag=0;
+		int flag = 0;
+		int temp_val = 0;
 		ReimbursementTrackVo trackData = new ReimbursementTrackVo();
 		trackData.setEmpNo(data.getEmpNo());
 		trackData.setReimbursementDate(data.getReimbursementDate());
@@ -474,54 +475,79 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		List<ReimbursementDetails> bill = Data.getReimbursementDetails();
 		for (int i = 0; i < bill.size(); i++) {
 			for (int j = 0; j < billData.size(); j++) {
-				if ((bill.get(j).getBillDate()).equals((billData.get(j).getBillDate()))) {
-					if ((bill.get(j).getCategoryName()).equals((billData.get(j).getCategoryName()))) {
+				if ((bill.get(j).getBillDate()).equals((billData.get(i).getBillDate()))) {
+					if ((bill.get(j).getCategoryName()).equals((billData.get(i).getCategoryName()))) {
 						if ((bill.get(j).getReimbursementDescription())
-								.equals((billData.get(j).getReimbursementDescription()))) {
-							if ((bill.get(j).getBillNo()) == ((billData.get(j).getBillNo()))) {
-								if ((bill.get(j).getCost()) == ((billData.get(j).getCost()))) {
-									 bill.get(i).setReimbursementTrack(data.getReimbursementId());
+								.equals((billData.get(i).getReimbursementDescription()))) {
+							if ((bill.get(j).getBillNo()) == ((billData.get(i).getBillNo()))) {
+								if ((bill.get(j).getCost()) == ((billData.get(i).getCost()))) {
+									bill.get(j).setReimbursementTrack(data.getReimbursementId());
+									temp_val = 1;
 								}
 							}
 						}
 					}
 				}
-				else
-				{
-					ReimbursementVo temp=new ReimbursementVo();
-					temp.setBillDate(billData.get(j).getBillDate());
-					temp.setReimbursementDescription((billData.get(j).getReimbursementDescription()));
-					temp.setCategoryName((billData.get(j).getCategoryName()));
-					temp.setCost((billData.get(j).getCost()));
-					temp.setBillNo((billData.get(j).getBillNo()));
-					temp.setBillStatus(Status.Save);
-					ReimbursementDetails convertBill=reimbursementMapper.voConversion(temp);
-					bill.add(convertBill);
-						File convertFile = new File("src/main/resources/public/bills/" + (billData.get(j).getBillNo())
-								+ "."
-								+ file[flag].getOriginalFilename().substring(file[flag].getOriginalFilename().lastIndexOf(".") + 1));
-						String path = "src/main/resources/Bills" + file[flag].getOriginalFilename();
-						try {
-							convertFile.createNewFile();
-							FileOutputStream fout = new FileOutputStream(convertFile);
-							fout.write(file[flag].getBytes());
-							flag=flag+1;
+			}
+			if (temp_val == 0) {
+				ReimbursementVo temp = new ReimbursementVo();
+				temp.setBillDate(billData.get(i).getBillDate());
+				temp.setReimbursementDescription((billData.get(i).getReimbursementDescription()));
+				temp.setCategoryName((billData.get(i).getCategoryName()));
+				temp.setCost((billData.get(i).getCost()));
+				temp.setBillNo((billData.get(i).getBillNo()));
+				temp.setBillStatus(Status.Save);
+				ReimbursementDetails convertBill = reimbursementMapper.voConversion(temp);
+				bill.add(convertBill);
+				File convertFile = new File("src/main/resources/public/bills/" + (billData.get(i).getBillNo()) + "."
+						+ file[flag].getOriginalFilename()
+								.substring(file[flag].getOriginalFilename().lastIndexOf(".") + 1));
+				String path = "src/main/resources/Bills" + file[flag].getOriginalFilename();
+				try {
+					convertFile.createNewFile();
+					FileOutputStream fout = new FileOutputStream(convertFile);
+					fout.write(file[flag].getBytes());
+					flag = flag + 1;
 
-						} catch (IOException e) {
+				} catch (IOException e) {
 
-						}
-					
-					
 				}
+
 			}
 		}
 		reimbursementTrackRepository.saveAndFlush(Data);
 		returnValue.setMessage("Successfully Updated");
 		returnValue.setStatus("sucess");
-		logger.info("{}",Data);
+		logger.info("{}", Data);
+
 		return returnValue;
-		
-		
 	}
-   
+
+	@Override
+	public ResponseVO billApproval(PageViewVo page) {
+		
+		ResponseVO returnValue = new ResponseVO();
+		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(page.getReimbursementId());
+		List<ReimbursementDetails> bill = Data.getReimbursementDetails();
+		for (int i = 0; i < bill.size(); i++) {
+			if(bill.get(i).getTrackId()==page.getBillId())
+			{
+				if(page.getAction()==0)
+				{
+					bill.get(i).setBillStatus(Status.Approved);
+					returnValue.setMessage("Approval Success");
+				}
+				else if(page.getAction()==1)
+				{
+					bill.get(i).setBillStatus(Status.Rejected);
+					returnValue.setMessage("Rejection Success");
+				}
+			}
+			reimbursementTrackRepository.saveAndFlush(Data);
+		}
+		
+		
+		return returnValue;
+	}
+
 }

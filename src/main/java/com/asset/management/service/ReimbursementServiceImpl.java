@@ -101,5 +101,10 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 		return reimbursementDao.updateBill(data);
 		
 	}
+
+	@Override
+	public ResponseVO billApproval(PageViewVo page) {
+		return reimbursementDao.billApproval(page);
+	}
 }
 

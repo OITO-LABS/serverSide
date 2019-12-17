@@ -31,6 +31,9 @@ public interface ReimbursementTrackRepository extends JpaRepository<Reimbursemen
 
 	@Query(value = "select * from reimbursement_track", nativeQuery = true)
 	Page getReimbursementView(Pageable page);
+	
+	@Query(value = "select * from reimbursement_track t where t.reimbursement_status!='Save' ", nativeQuery = true)
+	Page getReimbursementAdminView(Pageable page);
 
 	@Query(value = "select * from reimbursement_track re where emp_no like %?1% ", nativeQuery = true)
 	Page findByReimbursementSearchEmpNo(String searchkey, Pageable pageable);

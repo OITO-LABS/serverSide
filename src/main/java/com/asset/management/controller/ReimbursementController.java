@@ -124,6 +124,14 @@ public class ReimbursementController {
 		return reimbursementService.updateBill(data);
 		
 	}
+	
+	@PostMapping("admin-action")
+	public ResponseVO billApproval(@RequestBody PageViewVo page)
+	{
+		return reimbursementService.billApproval(page);
+	}
+	
+	
 
 }
 

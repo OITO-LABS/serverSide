@@ -41,6 +41,8 @@ public interface ReimbursementDao {
 	public void addBill(TempVo data);
 	
 	public ResponseVO updateBill(ReimbursementApplyVo data);
+	
+	ResponseVO billApproval(@RequestBody PageViewVo page);
 
 }
 

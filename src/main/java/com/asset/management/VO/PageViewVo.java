@@ -18,5 +18,10 @@ public class PageViewVo {
 	String empNo;
 	String sortKey;
 	String sortOrder;
+	Long reimbursementId;
+	Long billId;
+    int action;
+    String role;
+    
 }
 
