@@ -88,10 +88,51 @@ public class AssetDaoImpl implements AssetDao {
 
 	@Override
 	public PageData getAssetDetails(PaginationVO paginationVO) {
-
-		final Pageable pageable = PageRequest.of(paginationVO.getPage(), paginationVO.getLimit());
 		final String productName = paginationVO.getSearchkey();
-		final Page asset = assetAssignRepository.findSelectedField(productName, pageable);
+		Page asset;
+		if(paginationVO.getSortKey().equals("empNo")) {
+			paginationVO.setSortKey("assetId");
+		}
+		if(paginationVO.getSortKey().isEmpty()&& paginationVO.getSortOrder().isEmpty() && paginationVO.getSortKey()!="empId") {
+			paginationVO.setSortKey("assetId");
+			final Pageable pageable =PageRequest.of(paginationVO.getPage(), paginationVO.getLimit(),Sort.by(paginationVO.getSortKey()).ascending());
+			if(paginationVO.getEnableStatus().equals("Inactive")) {
+				asset = assetAssignRepository.findSelectedField(productName, pageable);
+			}
+			else {
+				asset = assetAssignRepository.findSelectedField(productName, pageable);
+			}
+		}
+		
+		else if(paginationVO.getSortOrder().equals("descending")) {
+				if(paginationVO.getSortKey().equals("assetKey")) {
+					paginationVO.setSortKey("asset_key");
+				}
+				final Pageable pageable = PageRequest.of(paginationVO.getPage(), paginationVO.getLimit(),Sort.by(paginationVO.getSortKey()).descending());
+				if(paginationVO.getEnableStatus().equals("Inactive")) {
+					asset = assetAssignRepository.findSelectedField(productName, pageable);
+				}
+				else {
+					asset = assetAssignRepository.findSelectedField(productName, pageable);
+				}
+
+			}
+
+		else {
+			if(paginationVO.getSortKey().equals("assetKey")) {
+				paginationVO.setSortKey("asset_key");
+			}
+			final Pageable pageable = PageRequest.of(paginationVO.getPage(), paginationVO.getLimit(),Sort.by(paginationVO.getSortKey()).ascending());
+			if(paginationVO.getEnableStatus().equals("Inactive")) {
+				asset =assetAssignRepository.findSelectedField(productName, pageable);
+			}
+			else {
+				asset = assetAssignRepository.findSelectedField(productName, pageable);
+			}
+
+		}
+		
+
 
 		final List<Object[]> assetList = asset.getContent();
 		final PageData data = new PageData();

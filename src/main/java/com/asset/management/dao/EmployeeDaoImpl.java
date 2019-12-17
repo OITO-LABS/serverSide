@@ -111,7 +111,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	@org.springframework.transaction.annotation.Transactional(propagation = Propagation.REQUIRED)
-	public void update(Long empId, EmployeeVo obj) {
+	public synchronized void update(Long empId, EmployeeVo obj) {
 		final java.util.Optional<Employee> temp = employeeRepository.findById(empId);
 		if (temp.isPresent()) {
 			final Employee emp = mappingObj.Map(obj);
