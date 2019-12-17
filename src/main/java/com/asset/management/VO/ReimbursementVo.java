@@ -14,6 +14,7 @@ import lombok.ToString;
 public class ReimbursementVo {
 
 	Long trackId;
+	Long reimbursementTrack;
 	String billDate;
 	String reimbursementDescription;
 	String categoryName;

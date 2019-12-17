@@ -3,6 +3,8 @@ package com.asset.management.VO;
 
 import java.math.BigInteger;
 
+import com.asset.management.dao.entity.Status;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,5 +18,6 @@ public class ListReimbursementVo {
 	String reimbursementDate;
 	String empNo;
 	double totalCost;
+	Status reimbursementStatus;
 }
 

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.asset.management.VO.ReimbursementTrackVo;
 import com.asset.management.dao.entity.ReimbursementTrack;
 import com.asset.management.dao.entity.Status;
 
@@ -43,5 +44,8 @@ public interface ReimbursementTrackRepository extends JpaRepository<Reimbursemen
 	@Modifying(flushAutomatically = true)
 	@Query(value = "UPDATE reimbursement_track t SET t.reimbursement_status=:status WHERE t.reimbursement_id=:reimbursementId", nativeQuery = true)
 	void setApprovalStatus(@Param("reimbursementId")Long reimbursementId, @Param("status") String status);
+
+	@Query(value = "select * from reimbursement_track t where t.reimbursement_id=:reimbursementId", nativeQuery = true)
+	ReimbursementTrack getReimbursemenData(@Param("reimbursementId") Long reimbursementId);
 
 }

@@ -42,7 +42,6 @@ import ch.qos.logback.classic.Logger;
 @RestController
 @RequestMapping("api/reimbursement")
 public class ReimbursementController {
-	//reimbursement
 	@Autowired
 	private ReimbursementService reimbursementService;
 
@@ -121,9 +120,9 @@ public class ReimbursementController {
 	}
 
 	@PostMapping("update-bill")
-	public String updateBill(@RequestBody TempVo data) {
-		reimbursementService.updateBill(data);
-		return "Success";
+	public ResponseVO updateBill(@ModelAttribute ReimbursementApplyVo data) {
+		return reimbursementService.updateBill(data);
+		
 	}
 
 }

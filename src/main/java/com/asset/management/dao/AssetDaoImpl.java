@@ -120,12 +120,11 @@ public class AssetDaoImpl implements AssetDao {
 		if (asset != null) {
 			asset.setEnableStatus(assetVo.getEnableStatus());
 			asset.setUpdatedDate(assetVo.getUpdatedDate());
-			//asset.setUpdatedDate(cal.getTime());
 
 			if (assetAssignEntity != null) {
 				assetAssignEntity.setAssignStatus(Status.Disabled);
 				assetAssignEntity.setCause("Device not working");
-				//assetAssignEntity.setUpdatedDate(cal.getTime());
+				assetAssignEntity.setUpdatedDate(assetVo.getUpdatedDate());
 				assetAssignRepository.saveAndFlush(assetAssignEntity);
 			}
 
