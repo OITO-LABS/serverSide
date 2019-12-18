@@ -505,7 +505,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 					else if (!((billData.get(i).getCategoryName()).equals((bill.get(j).getCategoryName())))) {
 						bill.get(j).setCategoryName(billData.get(i).getCategoryName());
-					} else if (((billData.get(i).getBillNo()) != ((bill.get(j).getBillNo()))) ) {
+					} else if ((billData.get(i).getBillNo()) != (bill.get(j).getBillNo()) ) {
 						bill.get(j).setBillNo(billData.get(i).getBillNo());
 					} else if (!((billData.get(i).getReimbursementDescription())
 							.equals((bill.get(j).getReimbursementDescription())))) {
@@ -513,11 +513,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 					} else if ((billData.get(i).getCost()) != (bill.get(j).getCost())) {
 						bill.get(j).setCost(billData.get(i).getCost());
 					}
-					
-//					 else if((String)(billData.get(i).getCost().to).equals((String)bill.get(j).getCost()))
-//					 {
-//						 
-//					 }
+	
 				}
 
 			}
