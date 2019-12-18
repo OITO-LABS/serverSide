@@ -106,5 +106,12 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	public ResponseVO billApproval(PageViewVo page) {
 		return reimbursementDao.billApproval(page);
 	}
+
+	@Override
+	public ListBillVo getBill(Long reimbursementId) {
+		return reimbursementDao.getBill(reimbursementId);
+	}
+
+	
 }
 

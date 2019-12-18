@@ -43,6 +43,8 @@ public interface ReimbursementDao {
 	public ResponseVO updateBill(ReimbursementApplyVo data);
 	
 	ResponseVO billApproval(@RequestBody PageViewVo page);
+	
+	public ListBillVo getBill(Long reimbursementId);
 
 }
 

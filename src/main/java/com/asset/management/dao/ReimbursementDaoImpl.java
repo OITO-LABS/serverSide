@@ -172,7 +172,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	public ListBillVo getReimbusementDetails(Long reimbursementId) {
 		final List<Object[]> billData = reimbursementRepository.findByReimbursementTrack(reimbursementId);
 		final ListBillVo listBill = new ListBillVo();
-		listBill.setBillDetails(listConverter.reConvertionBill(billData));
+		listBill.setBillDetails(listConverter.reConvertionBill(billData,"employee"));
 		final ReimbursementTrack reimbursementData = reimbursementTrackRepository
 				.findByReimbursementId(reimbursementId);
 		final Employee empData = employeeRepository.findByEmpNo(reimbursementData.getEmpNo());
@@ -254,7 +254,15 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	public ListPageData reimbursementGetEmpDetails(@RequestBody PageViewVo page) {
 		final Pageable pageable = PageRequest.of(page.getPage(), page.getSize(),
 				Sort.by("reimbursement_date").descending());
-		final Page data = reimbursementTrackRepository.findByReimbursementEmpNo(pageable, page.getEmpNo());
+		final Page data;
+		if(page.getRole().equals("employee"))
+		{
+		 data = reimbursementTrackRepository.findByReimbursementEmpNo(pageable, page.getEmpNo());
+		}
+		else
+		{
+		 data = reimbursementTrackRepository.findByReimbursementEmpNoAdmin(pageable, page.getEmpNo());
+		}
 		final List<Object[]> dataList = data.getContent();
 		final ListPageData pageData = new ListPageData();
 		pageData.setReimbursementDetails(listConverter.reConvertion(dataList));
@@ -491,20 +499,25 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 						&& ((billData.get(i).getTrackId()) == (bill.get(j).getTrackId()))) {
 					temp_val = 1;
 
-					if (((billData.get(i).getBillDate()).equals((bill.get(j).getBillDate()))) != true) {
+					if (!((billData.get(i).getBillDate()).equals((bill.get(j).getBillDate())))) {
 						bill.get(j).setBillDate(billData.get(i).getBillDate());
 					}
 
-					else if (((billData.get(i).getCategoryName()).equals((bill.get(j).getCategoryName()))) != true) {
+					else if (!((billData.get(i).getCategoryName()).equals((bill.get(j).getCategoryName())))) {
 						bill.get(j).setCategoryName(billData.get(i).getCategoryName());
-					} else if (((billData.get(i).getBillNo()) == ((bill.get(j).getBillNo()))) != true) {
+					} else if (((billData.get(i).getBillNo()) != ((bill.get(j).getBillNo()))) ) {
 						bill.get(j).setBillNo(billData.get(i).getBillNo());
-					} else if (((billData.get(i).getReimbursementDescription())
-							.equals((bill.get(j).getReimbursementDescription()))) != true) {
+					} else if (!((billData.get(i).getReimbursementDescription())
+							.equals((bill.get(j).getReimbursementDescription())))) {
 						bill.get(j).setReimbursementDescription(billData.get(i).getReimbursementDescription());
-					} else if (((billData.get(i).getCost()) == ((bill.get(j).getCost()))) != true) {
+					} else if ((billData.get(i).getCost()) != (bill.get(j).getCost())) {
 						bill.get(j).setCost(billData.get(i).getCost());
 					}
+					
+//					 else if((String)(billData.get(i).getCost().to).equals((String)bill.get(j).getCost()))
+//					 {
+//						 
+//					 }
 				}
 
 			}
@@ -565,6 +578,22 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		}
 
 		return returnValue;
+	}
+
+	@Override
+	public ListBillVo getBill(Long reimbursementId) {
+		final List<Object[]> billData = reimbursementRepository.findByReimbursementTrack(reimbursementId);
+		final ListBillVo listBill = new ListBillVo();
+		listBill.setBillDetails(listConverter.reConvertionBill(billData,"admin"));
+		final ReimbursementTrack reimbursementData = reimbursementTrackRepository
+				.findByReimbursementId(reimbursementId);
+		final Employee empData = employeeRepository.findByEmpNo(reimbursementData.getEmpNo());
+		listBill.setTotalCost(reimbursementData.getTotalCost());
+		listBill.setEmpNo(empData.getEmpNo());
+		listBill.setEmpName(empData.getFirstName() + " " + empData.getLastName());
+		listBill.setEmpDesignation(empData.getDesignation());
+		logger.info("{}", listBill);
+		return listBill;
 	}
 
 }

@@ -69,6 +69,12 @@ public class ReimbursementController {
 		return reimbursementService.getReimbursementDetails(reimbursementId);
 
 	}
+	
+	@GetMapping("admin/{reimbursementId}")
+	public ListBillVo getBill(@PathVariable Long reimbursementId) {
+		return reimbursementService.getBill(reimbursementId);
+
+	}
 
 	@PostMapping("reimbursement-list")
 	public ListPageData viewData(@RequestBody PageViewVo page) {

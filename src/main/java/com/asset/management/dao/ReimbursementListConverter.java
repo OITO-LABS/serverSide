@@ -46,13 +46,20 @@ public class ReimbursementListConverter {
 		return resultSetVO;
 	}
 
-	public static List<ReimbursementVo> reConvertionBill(List<Object[]> resultSet) {
+	public static List<ReimbursementVo> reConvertionBill(List<Object[]> resultSet,String role) {
 		final List<ReimbursementVo> resultSetVO = new ArrayList<>();
 		for (final Object[] result : resultSet) {
 			final ReimbursementVo reimbursementVo = new ReimbursementVo();
 			reimbursementVo.setTrackId(((BigInteger)result[0]).longValue());
 			reimbursementVo.setReimbursementTrack(((BigInteger)result[1]).longValue());
+			if(role.equals("employee"))
+			{
 			reimbursementVo.setBillDate((formatter.format((Date) result[2])).toString());
+			}
+			else
+			{
+				reimbursementVo.setBillDate((((Date) result[2])).toString());
+			}
 			reimbursementVo.setReimbursementDescription((String) result[3]);
 			reimbursementVo.setBillNo((BigInteger) result[4]);
 			reimbursementVo.setCost((double) result[5]);
