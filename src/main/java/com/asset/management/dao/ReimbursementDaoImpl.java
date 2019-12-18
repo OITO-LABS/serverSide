@@ -455,12 +455,20 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		for (int i = 0; i < array.size(); i++) {
 			ReimbursementVo bill = new ReimbursementVo();
 			JSONObject jsonObject1 = (JSONObject) array.get(i);
+			if((jsonObject1.get("trackId"))!=null)
+			{
+			bill.setTrackId((Long)(jsonObject1.get("trackId")));
+			}
+			if((jsonObject1.get("reimbursementTrack"))!=null)
+			{
+				bill.setReimbursementTrack((Long)(jsonObject1.get("reimbursementTrack")));
+			}
 			bill.setBillDate((String) jsonObject1.get("billDate"));
 			bill.setReimbursementDescription((String) jsonObject1.get("reimbursementDescription"));
 			bill.setCategoryName((String) jsonObject1.get("categoryName"));
-			BigInteger billNo = new BigInteger((String) jsonObject1.get("billNo"));
+			BigInteger billNo = new BigInteger((String) (jsonObject1.get("billNo")).toString());
 			bill.setBillNo(billNo);
-			String costCovert = (String) jsonObject1.get("cost");
+			String costCovert = ((jsonObject1.get("cost")).toString());
 			int x = Integer.parseInt(costCovert);
 			double cost = ((double) x);
 			bill.setCost(cost);
@@ -470,24 +478,35 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 		}
 		trackData.setReimbursementDetails(billData);
-
-		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(data.getReimbursementId());
+        Long id=billData.get(0).getReimbursementTrack();
+        logger.info("------>"+id);
+		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(id);
+		Data.setTotalCost(data.getTotalCost());
 		List<ReimbursementDetails> bill = Data.getReimbursementDetails();
-		for (int i = 0; i < bill.size(); i++) {
-			for (int j = 0; j < billData.size(); j++) {
-				if ((bill.get(j).getBillDate()).equals((billData.get(i).getBillDate()))) {
-					if ((bill.get(j).getCategoryName()).equals((billData.get(i).getCategoryName()))) {
-						if ((bill.get(j).getReimbursementDescription())
-								.equals((billData.get(i).getReimbursementDescription()))) {
-							if ((bill.get(j).getBillNo()) == ((billData.get(i).getBillNo()))) {
-								if ((bill.get(j).getCost()) == ((billData.get(i).getCost()))) {
-									bill.get(j).setReimbursementTrack(data.getReimbursementId());
-									temp_val = 1;
-								}
-							}
-						}
+		logger.info("{}",Data);
+
+		for (int i = 0; i < billData.size(); i++) {
+			for (int j = 0; j < bill.size(); j++) {
+				if (((billData.get(i).getTrackId()) != null)
+						&& ((billData.get(i).getTrackId()) == (bill.get(j).getTrackId()))) {
+					temp_val = 1;
+
+					if (((billData.get(i).getBillDate()).equals((bill.get(j).getBillDate()))) != true) {
+						bill.get(j).setBillDate(billData.get(i).getBillDate());
+					}
+
+					else if (((billData.get(i).getCategoryName()).equals((bill.get(j).getCategoryName()))) != true) {
+						bill.get(j).setCategoryName(billData.get(i).getCategoryName());
+					} else if (((billData.get(i).getBillNo()) == ((bill.get(j).getBillNo()))) != true) {
+						bill.get(j).setBillNo(billData.get(i).getBillNo());
+					} else if (((billData.get(i).getReimbursementDescription())
+							.equals((bill.get(j).getReimbursementDescription()))) != true) {
+						bill.get(j).setReimbursementDescription(billData.get(i).getReimbursementDescription());
+					} else if (((billData.get(i).getCost()) == ((bill.get(j).getCost()))) != true) {
+						bill.get(j).setCost(billData.get(i).getCost());
 					}
 				}
+
 			}
 			if (temp_val == 0) {
 				ReimbursementVo temp = new ReimbursementVo();
@@ -514,6 +533,8 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				}
 
 			}
+			temp_val = 0;
+
 		}
 		reimbursementTrackRepository.saveAndFlush(Data);
 		returnValue.setMessage("Successfully Updated");
@@ -521,32 +542,28 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		logger.info("{}", Data);
 
 		return returnValue;
+
 	}
 
 	@Override
 	public ResponseVO billApproval(PageViewVo page) {
-		
+
 		ResponseVO returnValue = new ResponseVO();
 		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(page.getReimbursementId());
 		List<ReimbursementDetails> bill = Data.getReimbursementDetails();
 		for (int i = 0; i < bill.size(); i++) {
-			if(bill.get(i).getTrackId()==page.getBillId())
-			{
-				if(page.getAction()==0)
-				{
+			if (bill.get(i).getTrackId() == page.getBillId()) {
+				if (page.getAction() == 0) {
 					bill.get(i).setBillStatus(Status.Approved);
 					returnValue.setMessage("Approval Success");
-				}
-				else if(page.getAction()==1)
-				{
+				} else if (page.getAction() == 1) {
 					bill.get(i).setBillStatus(Status.Rejected);
 					returnValue.setMessage("Rejection Success");
 				}
 			}
 			reimbursementTrackRepository.saveAndFlush(Data);
 		}
-		
-		
+
 		return returnValue;
 	}
 
