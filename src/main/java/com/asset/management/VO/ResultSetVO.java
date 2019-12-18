@@ -16,6 +16,11 @@ public class ResultSetVO {
 
 	}
 
+	private BigInteger getAssetId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public ResultSetVO() {
 
 	}

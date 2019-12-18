@@ -172,7 +172,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	public ListBillVo getReimbusementDetails(Long reimbursementId) {
 		final List<Object[]> billData = reimbursementRepository.findByReimbursementTrack(reimbursementId);
 		final ListBillVo listBill = new ListBillVo();
-		listBill.setBillDetails(listConverter.reConvertionBill(billData,"employee"));
+		listBill.setBillDetails(listConverter.reConvertionBill(billData, "employee"));
 		final ReimbursementTrack reimbursementData = reimbursementTrackRepository
 				.findByReimbursementId(reimbursementId);
 		final Employee empData = employeeRepository.findByEmpNo(reimbursementData.getEmpNo());
@@ -255,13 +255,10 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		final Pageable pageable = PageRequest.of(page.getPage(), page.getSize(),
 				Sort.by("reimbursement_date").descending());
 		final Page data;
-		if(page.getRole().equals("employee"))
-		{
-		 data = reimbursementTrackRepository.findByReimbursementEmpNo(pageable, page.getEmpNo());
-		}
-		else
-		{
-		 data = reimbursementTrackRepository.findByReimbursementEmpNoAdmin(pageable, page.getEmpNo());
+		if (page.getRole().equals("employee")) {
+			data = reimbursementTrackRepository.findByReimbursementEmpNo(pageable, page.getEmpNo());
+		} else {
+			data = reimbursementTrackRepository.findByReimbursementEmpNoAdmin(pageable, page.getEmpNo());
 		}
 		final List<Object[]> dataList = data.getContent();
 		final ListPageData pageData = new ListPageData();
@@ -463,13 +460,11 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		for (int i = 0; i < array.size(); i++) {
 			ReimbursementVo bill = new ReimbursementVo();
 			JSONObject jsonObject1 = (JSONObject) array.get(i);
-			if((jsonObject1.get("trackId"))!=null)
-			{
-			bill.setTrackId((Long)(jsonObject1.get("trackId")));
+			if ((jsonObject1.get("trackId")) != null) {
+				bill.setTrackId((Long) (jsonObject1.get("trackId")));
 			}
-			if((jsonObject1.get("reimbursementTrack"))!=null)
-			{
-				bill.setReimbursementTrack((Long)(jsonObject1.get("reimbursementTrack")));
+			if ((jsonObject1.get("reimbursementTrack")) != null) {
+				bill.setReimbursementTrack((Long) (jsonObject1.get("reimbursementTrack")));
 			}
 			bill.setBillDate((String) jsonObject1.get("billDate"));
 			bill.setReimbursementDescription((String) jsonObject1.get("reimbursementDescription"));
@@ -486,12 +481,12 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 		}
 		trackData.setReimbursementDetails(billData);
-        Long id=billData.get(0).getReimbursementTrack();
-        logger.info("------>"+id);
+		Long id = billData.get(0).getReimbursementTrack();
+		logger.info("------>" + id);
 		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(id);
 		Data.setTotalCost(data.getTotalCost());
 		List<ReimbursementDetails> bill = Data.getReimbursementDetails();
-		logger.info("{}",Data);
+		logger.info("{}", Data);
 
 		for (int i = 0; i < billData.size(); i++) {
 			for (int j = 0; j < bill.size(); j++) {
@@ -499,25 +494,16 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 						&& ((billData.get(i).getTrackId()) == (bill.get(j).getTrackId()))) {
 					temp_val = 1;
 
-					if (!((billData.get(i).getBillDate()).equals((bill.get(j).getBillDate())))) {
-						bill.get(j).setBillDate(billData.get(i).getBillDate());
-					}
+					bill.get(j).setBillDate(billData.get(i).getBillDate());
 
-					else if (!((billData.get(i).getCategoryName()).equals((bill.get(j).getCategoryName())))) {
-						bill.get(j).setCategoryName(billData.get(i).getCategoryName());
-					} else if (((billData.get(i).getBillNo()) != ((bill.get(j).getBillNo()))) ) {
-						bill.get(j).setBillNo(billData.get(i).getBillNo());
-					} else if (!((billData.get(i).getReimbursementDescription())
-							.equals((bill.get(j).getReimbursementDescription())))) {
-						bill.get(j).setReimbursementDescription(billData.get(i).getReimbursementDescription());
-					} else if ((billData.get(i).getCost()) != (bill.get(j).getCost())) {
-						bill.get(j).setCost(billData.get(i).getCost());
-					}
-					
-//					 else if((String)(billData.get(i).getCost().to).equals((String)bill.get(j).getCost()))
-//					 {
-//						 
-//					 }
+					bill.get(j).setCategoryName(billData.get(i).getCategoryName());
+
+					bill.get(j).setBillNo(billData.get(i).getBillNo());
+
+					bill.get(j).setReimbursementDescription(billData.get(i).getReimbursementDescription());
+
+					bill.get(j).setCost(billData.get(i).getCost());
+
 				}
 
 			}
@@ -584,7 +570,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	public ListBillVo getBill(Long reimbursementId) {
 		final List<Object[]> billData = reimbursementRepository.findByReimbursementTrack(reimbursementId);
 		final ListBillVo listBill = new ListBillVo();
-		listBill.setBillDetails(listConverter.reConvertionBill(billData,"admin"));
+		listBill.setBillDetails(listConverter.reConvertionBill(billData, "admin"));
 		final ReimbursementTrack reimbursementData = reimbursementTrackRepository
 				.findByReimbursementId(reimbursementId);
 		final Employee empData = employeeRepository.findByEmpNo(reimbursementData.getEmpNo());
