@@ -131,6 +131,12 @@ public class ReimbursementController {
 		
 	}
 	
+	@PostMapping("verify-bill")
+	public ResponseVO verifyBill(@RequestBody PageViewVo page) {
+		return reimbursementService.verifyBill(page);
+		
+	}
+	
 	@PostMapping("admin-action")
 	public ResponseVO billApproval(@RequestBody PageViewVo page)
 	{

@@ -144,7 +144,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 			}
 			reimbursementTrack.setReimbursementStatus(Status.Pending);
 			reimbursementTrackRepository.save(reimbursementTrack);
-			flag = 1;
+			flag = 0;
 			returnValue.setMessage("Successfully Submitted");
 		}
 
@@ -447,6 +447,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		ResponseVO returnValue = new ResponseVO();
 		MultipartFile[] file = data.getImageData();
 		int flag = 0;
+		int fileEmpty=0;
 		int temp_val = 0;
 		ReimbursementTrackVo trackData = new ReimbursementTrackVo();
 		trackData.setEmpNo(data.getEmpNo());
@@ -493,7 +494,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				if (((billData.get(i).getTrackId()) != null)
 						&& ((billData.get(i).getTrackId()) == (bill.get(j).getTrackId()))) {
 					temp_val = 1;
-					
+
 					bill.get(j).setBillDate(billData.get(i).getBillDate());
 
 					bill.get(j).setCategoryName(billData.get(i).getCategoryName());
@@ -503,7 +504,6 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 					bill.get(j).setReimbursementDescription(billData.get(i).getReimbursementDescription());
 
 					bill.get(j).setCost(billData.get(i).getCost());
-
 
 				}
 
@@ -518,6 +518,14 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				temp.setBillStatus(Status.Save);
 				ReimbursementDetails convertBill = reimbursementMapper.voConversion(temp);
 				bill.add(convertBill);
+				if(data.getImageData()==null)
+				{
+					returnValue.setMessage("Please upload a file !!!");
+					returnValue.setStatus("failed");
+					fileEmpty=1;
+				}
+				else
+				{	
 				File convertFile = new File("src/main/resources/public/bills/" + (billData.get(i).getBillNo()) + "."
 						+ file[flag].getOriginalFilename()
 								.substring(file[flag].getOriginalFilename().lastIndexOf(".") + 1));
@@ -531,14 +539,17 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				} catch (IOException e) {
 
 				}
-
+			}
 			}
 			temp_val = 0;
 
 		}
+		if(fileEmpty==0)
+		{
 		reimbursementTrackRepository.saveAndFlush(Data);
 		returnValue.setMessage("Successfully Updated");
 		returnValue.setStatus("sucess");
+		}
 		logger.info("{}", Data);
 
 		return returnValue;
@@ -581,6 +592,18 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		listBill.setEmpDesignation(empData.getDesignation());
 		logger.info("{}", listBill);
 		return listBill;
+	}
+
+	@Override
+	public ResponseVO verifyBill(PageViewVo page) {
+		
+		ResponseVO returnValue = new ResponseVO();
+		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(page.getReimbursementId());
+		Data.setReimbursementStatus(Status.Verified);
+		reimbursementTrackRepository.saveAndFlush(Data);
+		returnValue.setMessage("Success");
+		returnValue.setStatus("sucess");
+		return returnValue;
 	}
 
 }

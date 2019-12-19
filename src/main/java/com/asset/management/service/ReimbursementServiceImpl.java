@@ -112,6 +112,11 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 		return reimbursementDao.getBill(reimbursementId);
 	}
 
+	@Override
+	public ResponseVO verifyBill(PageViewVo page) {
+		return reimbursementDao.verifyBill(page);
+	}
+
 	
 }
 
