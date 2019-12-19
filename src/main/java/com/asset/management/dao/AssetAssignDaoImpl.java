@@ -39,7 +39,6 @@ public class AssetAssignDaoImpl implements AssetAssignDao {
 	@Autowired
 	AssetAssignRepository assetAssign;
 
-	// Assign asset to an employee.
 	@Override
 	public ResponseVO assetAssigned(Long assetId, AssetAssignVO assetAssignVO) {
 		final ResponseVO response = new ResponseVO();
@@ -68,7 +67,6 @@ public class AssetAssignDaoImpl implements AssetAssignDao {
 		return response;
 	}
 
-	// Return a device
 	@Override
 	public ResponseVO returnDevice(Long assetId, AssetAssignVO assetAssignVO) {
 		final ResponseVO response = new ResponseVO();
@@ -93,7 +91,6 @@ public class AssetAssignDaoImpl implements AssetAssignDao {
 		return response;
 	}
 
-	// Fetch all the asset details.
 	@Override
 	public List<AssetAssignVO> getAll(Long empId) {
 		final List<AssetAssignEntity> assetAssignEntity = assetAssign.findByEmployee(empId);

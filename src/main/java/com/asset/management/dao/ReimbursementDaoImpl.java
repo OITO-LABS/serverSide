@@ -144,12 +144,11 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				reimbursementDetails.get(i).setBillStatus(Status.Pending);
 			}
 			reimbursementTrack.setReimbursementStatus(Status.Pending);
-			if(reimbursementTrackRepository.save(reimbursementTrack).getReimbursementId()!=null) {
+			if (reimbursementTrackRepository.save(reimbursementTrack).getReimbursementId() != null) {
 				flag = 0;
 				returnValue.setMessage("Successfully Submitted");
 				returnValue.setStatus("success");
-			}
-			else {
+			} else {
 				throw new Exception("Bill submission failed");
 			}
 
@@ -209,12 +208,6 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 	@Override
 	public ListPageData getByDate(PageViewVo date) {
-
-//		final Pageable pageable = PageRequest.of(date.getPage(), date.getSize(),
-//				Sort.by("reimbursement_date").descending());
-//		final Page data = reimbursementTrackRepository.getAllBetweenDates(pageable, date.getDateFrom(),
-//				date.getDateTo());
-//		
 
 		Page data;
 		if (date.getSortKey().equals("reimbursementDate")) {
@@ -326,10 +319,6 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	@Override
 	public ListPageData searchEmployeeId(PageViewVo page) {
 
-//		final Pageable pageable = PageRequest.of(page.getPage(), page.getSize(),
-//				Sort.by("reimbursement_date").descending());
-//		final Page data = reimbursementTrackRepository.findByReimbursementSearchEmpNo(page.getEmpNo(), pageable);
-
 		Page data;
 		if (page.getSortKey().equals("reimbursementDate")) {
 			page.setSortKey("reimbursement_date");
@@ -424,25 +413,23 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	@Override
 	@org.springframework.transaction.annotation.Transactional(propagation = Propagation.REQUIRED)
 	public ResponseVO sendForApproval(TempVo data) throws Exception {
-		ResponseVO response=new ResponseVO();
+		ResponseVO response = new ResponseVO();
 		ReimbursementTrack trackID = reimbursementTrackRepository.getOne(data.getReimbursementId());
 		List<ReimbursementDetails> bills = reimbursementRepository.findByReimbursementId(data.getReimbursementId());
 		trackID.setReimbursementStatus(Status.Pending);
 		reimbursementTrackRepository.saveAndFlush(trackID);
 		for (int i = 0; i < bills.size(); i++) {
 			bills.get(i).setBillStatus(Status.Pending);
-			if(reimbursementRepository.saveAndFlush(bills.get(i)).getTrackId()!=null) {
+			if (reimbursementRepository.saveAndFlush(bills.get(i)).getTrackId() != null) {
 				response.setStatus("success");
-			}
-			else {
+			} else {
 				response.setStatus("failed");
 				break;
 			}
 		}
-		if(response.getStatus().equals("success")) {
+		if (response.getStatus().equals("success")) {
 			return response;
-		}
-		else {
+		} else {
 			throw new Exception("Bill updation failed");
 		}
 	}
@@ -450,12 +437,11 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ResponseVO deleteBill(TempVo data) throws Exception {
-		ResponseVO response=new ResponseVO();
+		ResponseVO response = new ResponseVO();
 		reimbursementRepository.deleteByBillId(data.getBillId());
-		if(reimbursementRepository.findByBillId(data.getBillId()).equals(null)) {
+		if (reimbursementRepository.findByBillId(data.getBillId()).equals(null)) {
 			response.setMessage("success");
-		}
-		else {
+		} else {
 			response.setStatus("failed");
 			throw new Exception("Deletion failed");
 		}
@@ -464,17 +450,14 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 	@Override
 	public ResponseVO addBill(TempVo data) throws Exception {
-		ResponseVO response=new ResponseVO();
-		if(data!=null) {
+		ResponseVO response = new ResponseVO();
+		if (data != null) {
 			logger.info("------------------> Add Bill <-----------------------------");
 			response.setStatus("success");
-		}
-		else {
-			//response.setStatus("failed");
+		} else {
 			throw new Exception("Addition failed");
 		}
 		return response;
-			
 
 	}
 
@@ -484,7 +467,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		ResponseVO returnValue = new ResponseVO();
 		MultipartFile[] file = data.getImageData();
 		int flag = 0;
-		int fileEmpty=0;
+		int fileEmpty = 0;
 		int temp_val = 0;
 		ReimbursementTrackVo trackData = new ReimbursementTrackVo();
 		trackData.setEmpNo(data.getEmpNo());
@@ -555,42 +538,37 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				temp.setBillStatus(Status.Save);
 				ReimbursementDetails convertBill = reimbursementMapper.voConversion(temp);
 				bill.add(convertBill);
-				if(data.getImageData()==null)
-				{
+				if (data.getImageData() == null) {
 					returnValue.setMessage("Please upload a file !!!");
 					returnValue.setStatus("failed");
-					fileEmpty=1;
-				}
-				else
-				{	
-				File convertFile = new File("src/main/resources/public/bills/" + (billData.get(i).getBillNo()) + "."
-						+ file[flag].getOriginalFilename()
-								.substring(file[flag].getOriginalFilename().lastIndexOf(".") + 1));
-				String path = "src/main/resources/Bills" + file[flag].getOriginalFilename();
-				try {
-					convertFile.createNewFile();
-					FileOutputStream fout = new FileOutputStream(convertFile);
-					fout.write(file[flag].getBytes());
-					flag = flag + 1;
+					fileEmpty = 1;
+				} else {
+					File convertFile = new File("src/main/resources/public/bills/" + (billData.get(i).getBillNo()) + "."
+							+ file[flag].getOriginalFilename()
+									.substring(file[flag].getOriginalFilename().lastIndexOf(".") + 1));
+					String path = "src/main/resources/Bills" + file[flag].getOriginalFilename();
+					try {
+						convertFile.createNewFile();
+						FileOutputStream fout = new FileOutputStream(convertFile);
+						fout.write(file[flag].getBytes());
+						flag = flag + 1;
 
-				} catch (IOException e) {
+					} catch (IOException e) {
 
+					}
 				}
-			}
 			}
 			temp_val = 0;
 
 		}
-		if(fileEmpty==0)
-		{
-		if(reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId()!=null) {
-			returnValue.setMessage("Successfully Updated");
-			returnValue.setStatus("sucess");
-		}
-		else {
-			throw new Exception("Updation Failed");
-		}
-		
+		if (fileEmpty == 0) {
+			if (reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId() != null) {
+				returnValue.setMessage("Successfully Updated");
+				returnValue.setStatus("sucess");
+			} else {
+				throw new Exception("Updation Failed");
+			}
+
 		}
 		logger.info("{}", Data);
 
@@ -614,10 +592,9 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 					returnValue.setMessage("Rejection Success");
 				}
 			}
-			if(reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId()!=null) {
+			if (reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId() != null) {
 				returnValue.setStatus("success");
-			}
-			else {
+			} else {
 				throw new Exception("Approval failed");
 			}
 		}
@@ -643,18 +620,17 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 	@Override
 	public ResponseVO verifyBill(PageViewVo page) throws Exception {
-		
+
 		ResponseVO returnValue = new ResponseVO();
 		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(page.getReimbursementId());
 		Data.setReimbursementStatus(Status.Verified);
-		if(reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId()!=null) {
+		if (reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId() != null) {
 			returnValue.setMessage("Success");
 			returnValue.setStatus("sucess");
-		}
-		else {
+		} else {
 			throw new Exception("Approval operation failed");
 		}
-		
+
 		return returnValue;
 	}
 

@@ -45,7 +45,7 @@ public class ReimbursementController {
 	@Autowired
 	private ReimbursementService reimbursementService;
 
-	@PostMapping("apply") // ResponseVO data//ReimbursementTrackVo
+	@PostMapping("apply") 
 	public ResponseVO applyReimbursement(@ModelAttribute ReimbursementApplyVo data) throws JsonParseException, JsonMappingException, IOException {
 		ResponseVO response=new ResponseVO();
 		try {
@@ -60,7 +60,6 @@ public class ReimbursementController {
 		
 		return  reimbursementService.applyReimbursement(data);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			response.setStatus("failed");
 			response.setMessage("Bill can't register");
 			e.printStackTrace();
