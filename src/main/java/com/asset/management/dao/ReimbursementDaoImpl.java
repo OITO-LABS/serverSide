@@ -3,6 +3,7 @@ package com.asset.management.dao;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -182,6 +183,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		final ReimbursementTrack reimbursementData = reimbursementTrackRepository
 				.findByReimbursementId(reimbursementId);
 		final Employee empData = employeeRepository.findByEmpNo(reimbursementData.getEmpNo());
+		listBill.setReimbursementDate(reimbursementData.getReimbursementDate());
 		listBill.setTotalCost(reimbursementData.getTotalCost());
 		listBill.setEmpNo(empData.getEmpNo());
 		listBill.setEmpName(empData.getFirstName() + " " + empData.getLastName());

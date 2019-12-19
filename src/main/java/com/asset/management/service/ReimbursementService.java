@@ -27,23 +27,23 @@ public interface ReimbursementService {
 
 	ListPageData getByDate(PageViewVo date);
 
-	ListPageData reimbursementGetEmpDetails(@RequestBody PageViewVo page);
+	ListPageData reimbursementGetEmpDetails( PageViewVo page);
 
 	ListPageData viewData(PageViewVo page);
 
-	ListPageData searchEmployee(@RequestBody PageViewVo page);
+	ListPageData searchEmployee(PageViewVo page);
 
-	ListPageData searchEmployeeDate(@RequestBody PageViewVo page);
+	ListPageData searchEmployeeDate(PageViewVo page);
 	
 	public ResponseVO sendForApproval(TempVo data)throws Exception;
 	
 	public ResponseVO  deleteBill(TempVo data) throws Exception;
 	
-	public ResponseVO addBill(@RequestBody TempVo data) throws Exception;
+	public ResponseVO addBill(TempVo data) throws Exception;
 	
 	public ResponseVO updateBill(ReimbursementApplyVo data) throws Exception;
 	
-	ResponseVO billApproval(@RequestBody PageViewVo page) throws Exception;
+	ResponseVO billApproval(PageViewVo page) throws Exception;
 	
 	public ListBillVo getBill(Long reimbursementId);
 	

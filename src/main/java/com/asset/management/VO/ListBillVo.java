@@ -1,6 +1,7 @@
 
 package com.asset.management.VO;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
@@ -17,5 +18,6 @@ public class ListBillVo {
 	String empName;
 	String empNo;
 	String empDesignation;
+	String reimbursementDate;;
 
 }
