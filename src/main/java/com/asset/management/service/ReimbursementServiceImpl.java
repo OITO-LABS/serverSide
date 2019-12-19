@@ -25,7 +25,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	ReimbursementDaoImpl reimbursementDao;
 
 	@Override
-	public ResponseVO applyReimbursement(ReimbursementApplyVo data) {
+	public ResponseVO applyReimbursement(ReimbursementApplyVo data) throws Exception {
 		logger.info("In Service :Get method invoked !!!!!!!!!!");
 		return reimbursementDao.applyReimbursement(data);
 
@@ -79,41 +79,42 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 //
 
 	@Override
-	public void sendForApproval(TempVo data) {
-		reimbursementDao.sendForApproval(data);
+	public ResponseVO sendForApproval(TempVo data) throws Exception {
+		return reimbursementDao.sendForApproval(data);
 
 	}
 
 	@Override
-	public void deleteBill(TempVo data) {
-		reimbursementDao.deleteBill(data);
+	public ResponseVO deleteBill(TempVo data) throws Exception{
+		return reimbursementDao.deleteBill(data);
+
 
 	}
 
 	@Override
-	public void addBill(TempVo data) {
+	public ResponseVO addBill(TempVo data) throws Exception {
 		
-		reimbursementDao.addBill(data);
+		return reimbursementDao.addBill(data);
 	}
 
 	@Override
-	public ResponseVO updateBill(ReimbursementApplyVo data) {
+	public ResponseVO updateBill(ReimbursementApplyVo data) throws Exception {
 		return reimbursementDao.updateBill(data);
 		
 	}
 
 	@Override
-	public ResponseVO billApproval(PageViewVo page) {
+	public ResponseVO billApproval(PageViewVo page) throws Exception{
 		return reimbursementDao.billApproval(page);
 	}
 
 	@Override
-	public ListBillVo getBill(Long reimbursementId) {
+	public ListBillVo getBill(Long reimbursementId){
 		return reimbursementDao.getBill(reimbursementId);
 	}
 
 	@Override
-	public ResponseVO verifyBill(PageViewVo page) {
+	public ResponseVO verifyBill(PageViewVo page) throws Exception{
 		return reimbursementDao.verifyBill(page);
 	}
 

@@ -17,7 +17,7 @@ import com.asset.management.VO.TempVo;
 
 public interface ReimbursementService {
 
-	ResponseVO applyReimbursement(ReimbursementApplyVo data);
+	ResponseVO applyReimbursement(ReimbursementApplyVo data) throws Exception;
 
 	ListBillVo getReimbursementDetails(Long reimbursement_id);
 
@@ -35,19 +35,19 @@ public interface ReimbursementService {
 
 	ListPageData searchEmployeeDate(@RequestBody PageViewVo page);
 	
-	public void sendForApproval(TempVo data);
+	public ResponseVO sendForApproval(TempVo data)throws Exception;
 	
-	public void  deleteBill(TempVo data);
+	public ResponseVO  deleteBill(TempVo data) throws Exception;
 	
-	public void addBill(@RequestBody TempVo data);
+	public ResponseVO addBill(@RequestBody TempVo data) throws Exception;
 	
-	public ResponseVO updateBill(ReimbursementApplyVo data);
+	public ResponseVO updateBill(ReimbursementApplyVo data) throws Exception;
 	
-	ResponseVO billApproval(@RequestBody PageViewVo page);
+	ResponseVO billApproval(@RequestBody PageViewVo page) throws Exception;
 	
 	public ListBillVo getBill(Long reimbursementId);
 	
-	public ResponseVO verifyBill(PageViewVo page);
+	public ResponseVO verifyBill(PageViewVo page) throws Exception;
 }
 
 

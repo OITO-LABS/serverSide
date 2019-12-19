@@ -47,8 +47,8 @@ public class ReimbursementController {
 
 	@PostMapping("apply") // ResponseVO data//ReimbursementTrackVo
 	public ResponseVO applyReimbursement(@ModelAttribute ReimbursementApplyVo data) throws JsonParseException, JsonMappingException, IOException {
-		
-
+		ResponseVO response=new ResponseVO();
+		try {
 		MultipartFile[] file = data.getImageData();
 		System.out.println(data.getEmpNo());
 	    System.out.println(data.getReimbursementDetails());
@@ -56,7 +56,16 @@ public class ReimbursementController {
 			String resp = files.getOriginalFilename();
 			System.out.println(resp);
 		}
+		response.setStatus("success");
+		
 		return  reimbursementService.applyReimbursement(data);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			response.setStatus("failed");
+			response.setMessage("Bill can't register");
+			e.printStackTrace();
+		}
+		return response;
 	}
 
 	@GetMapping("list-category")
@@ -106,41 +115,89 @@ public class ReimbursementController {
 	}
 
 	@PostMapping("send-approval")
-	public String sendForApproval(@RequestBody TempVo data) {
-
-		reimbursementService.sendForApproval(data);
-		return "Sucess";
+	public ResponseVO sendForApproval(@RequestBody TempVo data) {
+		ResponseVO response=new ResponseVO();
+		try {
+			response=reimbursementService.sendForApproval(data);
+		}
+		catch(Exception e){
+			response.setStatus("failed");
+			response.setMessage("Bill approve operation failed");
+			e.printStackTrace();
+		}
+		
+		return response;
 	}
 
 	@PostMapping("delete-bill")
-	public String deleteBill(@RequestBody TempVo data) {
-
-		reimbursementService.deleteBill(data);
-		return "Sucess";
+	public ResponseVO deleteBill(@RequestBody TempVo data) {
+		ResponseVO response=new ResponseVO();
+		try {
+			response=reimbursementService.deleteBill(data);
+		} catch (Exception e) {
+			response.setStatus("failed");
+			response.setMessage("Deletion failed");
+			e.printStackTrace();
+		}
+		return response;
 	}
 
 	@PostMapping("add-bill")
-	public String addBill(@RequestBody TempVo data) {
-		reimbursementService.addBill(data);
-		return "Success";
+	public ResponseVO addBill(@RequestBody TempVo data) {
+		ResponseVO response=new ResponseVO();
+		try {
+			response=reimbursementService.addBill(data);;
+		}
+		catch(Exception e){
+			response.setStatus("failed");
+			response.setMessage("Deletion failed");
+			e.printStackTrace();
+		}
+		return response;
 	}
 
 	@PostMapping("update-bill")
 	public ResponseVO updateBill(@ModelAttribute ReimbursementApplyVo data) {
-		return reimbursementService.updateBill(data);
-		
+		ResponseVO response=new ResponseVO();
+		try {
+			response=reimbursementService.updateBill(data);
+		}
+		catch(Exception e) {
+			response.setStatus("failed");
+			response.setMessage("Updation failed");
+			e.printStackTrace();
+		}
+		return response;
 	}
 	
 	@PostMapping("verify-bill")
 	public ResponseVO verifyBill(@RequestBody PageViewVo page) {
-		return reimbursementService.verifyBill(page);
+		ResponseVO response=new ResponseVO();
+		try {
+			response=reimbursementService.verifyBill(page);
+		}
+		catch(Exception e) {
+			response.setStatus("failed");
+			response.setMessage("Verification failed");
+			e.printStackTrace();
+		}
+		return response;
 		
 	}
 	
 	@PostMapping("admin-action")
 	public ResponseVO billApproval(@RequestBody PageViewVo page)
 	{
-		return reimbursementService.billApproval(page);
+		ResponseVO response=new ResponseVO();
+		try {
+			response=reimbursementService.billApproval(page);
+		}
+		catch(Exception e) {
+			response.setStatus("failed");
+			response.setMessage("Verification failed");
+			e.printStackTrace();
+		}
+		return response;
 	}
 	
 	

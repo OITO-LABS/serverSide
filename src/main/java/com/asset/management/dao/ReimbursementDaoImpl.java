@@ -76,7 +76,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	EmployeeRepository employeeRepository;
 
 	@Override
-	public ResponseVO applyReimbursement(ReimbursementApplyVo data) {
+	public ResponseVO applyReimbursement(ReimbursementApplyVo data) throws Exception {
 
 		ResponseVO returnValue = new ResponseVO();
 		int flag = 0;
@@ -143,9 +143,15 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 				reimbursementDetails.get(i).setBillStatus(Status.Pending);
 			}
 			reimbursementTrack.setReimbursementStatus(Status.Pending);
-			reimbursementTrackRepository.save(reimbursementTrack);
-			flag = 0;
-			returnValue.setMessage("Successfully Submitted");
+			if(reimbursementTrackRepository.save(reimbursementTrack).getReimbursementId()!=null) {
+				flag = 0;
+				returnValue.setMessage("Successfully Submitted");
+				returnValue.setStatus("success");
+			}
+			else {
+				throw new Exception("Bill submission failed");
+			}
+
 		}
 
 		if (flag == 1) {
@@ -415,34 +421,63 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 
 	@Override
 	@org.springframework.transaction.annotation.Transactional(propagation = Propagation.REQUIRED)
-	public void sendForApproval(TempVo data) {
-
+	public ResponseVO sendForApproval(TempVo data) throws Exception {
+		ResponseVO response=new ResponseVO();
 		ReimbursementTrack trackID = reimbursementTrackRepository.getOne(data.getReimbursementId());
 		List<ReimbursementDetails> bills = reimbursementRepository.findByReimbursementId(data.getReimbursementId());
 		trackID.setReimbursementStatus(Status.Pending);
 		reimbursementTrackRepository.saveAndFlush(trackID);
 		for (int i = 0; i < bills.size(); i++) {
 			bills.get(i).setBillStatus(Status.Pending);
-			reimbursementRepository.saveAndFlush(bills.get(i));
+			if(reimbursementRepository.saveAndFlush(bills.get(i)).getTrackId()!=null) {
+				response.setStatus("success");
+			}
+			else {
+				response.setStatus("failed");
+				break;
+			}
 		}
-
+		if(response.getStatus().equals("success")) {
+			return response;
+		}
+		else {
+			throw new Exception("Bill updation failed");
+		}
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void deleteBill(TempVo data) {
+	public ResponseVO deleteBill(TempVo data) throws Exception {
+		ResponseVO response=new ResponseVO();
 		reimbursementRepository.deleteByBillId(data.getBillId());
+		if(reimbursementRepository.findByBillId(data.getBillId()).equals(null)) {
+			response.setMessage("success");
+		}
+		else {
+			response.setStatus("failed");
+			throw new Exception("Deletion failed");
+		}
+		return response;
+	}
+
+	@Override
+	public ResponseVO addBill(TempVo data) throws Exception {
+		ResponseVO response=new ResponseVO();
+		if(data!=null) {
+			logger.info("------------------> Add Bill <-----------------------------");
+			response.setStatus("success");
+		}
+		else {
+			//response.setStatus("failed");
+			throw new Exception("Addition failed");
+		}
+		return response;
+			
 
 	}
 
 	@Override
-	public void addBill(TempVo data) {
-		logger.info("------------------> Add Bill <-----------------------------");
-
-	}
-
-	@Override
-	public ResponseVO updateBill(ReimbursementApplyVo data) {
+	public ResponseVO updateBill(ReimbursementApplyVo data) throws Exception {
 
 		ResponseVO returnValue = new ResponseVO();
 		MultipartFile[] file = data.getImageData();
@@ -546,9 +581,14 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 		}
 		if(fileEmpty==0)
 		{
-		reimbursementTrackRepository.saveAndFlush(Data);
-		returnValue.setMessage("Successfully Updated");
-		returnValue.setStatus("sucess");
+		if(reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId()!=null) {
+			returnValue.setMessage("Successfully Updated");
+			returnValue.setStatus("sucess");
+		}
+		else {
+			throw new Exception("Updation Failed");
+		}
+		
 		}
 		logger.info("{}", Data);
 
@@ -557,7 +597,7 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	}
 
 	@Override
-	public ResponseVO billApproval(PageViewVo page) {
+	public ResponseVO billApproval(PageViewVo page) throws Exception {
 
 		ResponseVO returnValue = new ResponseVO();
 		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(page.getReimbursementId());
@@ -572,7 +612,12 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 					returnValue.setMessage("Rejection Success");
 				}
 			}
-			reimbursementTrackRepository.saveAndFlush(Data);
+			if(reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId()!=null) {
+				returnValue.setStatus("success");
+			}
+			else {
+				throw new Exception("Approval failed");
+			}
 		}
 
 		return returnValue;
@@ -595,14 +640,19 @@ public class ReimbursementDaoImpl implements ReimbursementDao {
 	}
 
 	@Override
-	public ResponseVO verifyBill(PageViewVo page) {
+	public ResponseVO verifyBill(PageViewVo page) throws Exception {
 		
 		ResponseVO returnValue = new ResponseVO();
 		ReimbursementTrack Data = reimbursementTrackRepository.getReimbursemenData(page.getReimbursementId());
 		Data.setReimbursementStatus(Status.Verified);
-		reimbursementTrackRepository.saveAndFlush(Data);
-		returnValue.setMessage("Success");
-		returnValue.setStatus("sucess");
+		if(reimbursementTrackRepository.saveAndFlush(Data).getReimbursementId()!=null) {
+			returnValue.setMessage("Success");
+			returnValue.setStatus("sucess");
+		}
+		else {
+			throw new Exception("Approval operation failed");
+		}
+		
 		return returnValue;
 	}
 
