@@ -39,6 +39,10 @@ public class ReimbursementListConverter {
 			{
 				reimbursementViewVO.setReimbursementStatus(Status.Rejected);
 			}
+			else if(((String)result[4]).equals("Verified"))
+			{
+				reimbursementViewVO.setReimbursementStatus(Status.Verified);
+			}
 			//reimbursementViewVO.setBillStatus(status);
 			resultSetVO.add(reimbursementViewVO);
 		}
@@ -73,11 +77,11 @@ public class ReimbursementListConverter {
 			{
 				reimbursementVo.setBillStatus(Status.Pending);
 			}
-			else if(((String)result[4]).equals("Approved"))
+			else if(((String)result[7]).equals("Approved"))
 			{
 				reimbursementVo.setBillStatus(Status.Approved);
 			}
-			else if(((String)result[4]).equals("Rejected"))
+			else if(((String)result[7]).equals("Rejected"))
 			{
 				reimbursementVo.setBillStatus(Status.Rejected);
 			}
