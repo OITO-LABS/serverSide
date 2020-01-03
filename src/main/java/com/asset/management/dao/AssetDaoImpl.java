@@ -91,10 +91,10 @@ public class AssetDaoImpl implements AssetDao {
 		final String productName = paginationVO.getSearchkey();
 		Page asset;
 		if(paginationVO.getSortKey().equals("empNo")) {
-			paginationVO.setSortKey("assetId");
+			paginationVO.setSortKey("emp_no");
 		}
 		if(paginationVO.getSortKey().isEmpty()&& paginationVO.getSortOrder().isEmpty() && paginationVO.getSortKey()!="empId") {
-			paginationVO.setSortKey("assetId");
+			paginationVO.setSortKey("asset_id");
 			final Pageable pageable =PageRequest.of(paginationVO.getPage(), paginationVO.getLimit(),Sort.by(paginationVO.getSortKey()).ascending());
 			if(paginationVO.getEnableStatus().equals("Inactive")) {
 				asset = assetAssignRepository.findSelectedField(productName, pageable);
