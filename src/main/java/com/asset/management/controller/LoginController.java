@@ -98,6 +98,22 @@ public class LoginController {
 		return status;
 	}
 	
+	@PostMapping("/forgot/send-mail")
+	public ResponseVO forgotMail(@ModelAttribute final Mail obj) {
+		final ResponseVO status = new ResponseVO();
+		try {
+			final String mail=obj.getTo();
+			final Employee emp=loginService.findEmp(mail);
+			obj.setToken(loginService.generatePasswordToken(emp.getEmpId()));
+			loginService.sendmail(obj);
+			status.setStatus("success");
+		} catch (final Exception ex) {
+			status.setStatus("Failed!");
+			status.setMessage(ex.getMessage());
+		}
+		return status;
+	}
+	
 	@GetMapping("/activesession")
 	public ProfileVo getSession() {
 		Long empId=(Long)request.getSession().getAttribute("empId");

@@ -62,7 +62,7 @@ public class SpringSecurityConfigurationBasicAuth extends WebSecurityConfigurerA
 	protected void configure(final HttpSecurity http) throws Exception {
 
 		http.csrf().disable().authorizeRequests()
-		.antMatchers("/css/**", "/index", "/static/**", "/*.js", "/*.json", "/*.ico", "/oito-trv","/oito-trv/reset-password","/api/login/reset",
+		.antMatchers("/css/**", "/index", "/static/**", "/*.js", "/*.json", "/*.ico", "/oito-trv","/oito-trv/reset-password","/api/login/reset","/oito-trv/forgot-password","/api/login/forgot/send-mail",
 				"/config/appconfig.json")
 		.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/oito-trv")
 		.loginProcessingUrl("/api/login").usernameParameter("username").passwordParameter("password")
